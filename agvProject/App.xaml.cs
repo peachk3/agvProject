@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using agvProject.Views;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -11,7 +12,8 @@ namespace agvProject
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
         }
     }
 
