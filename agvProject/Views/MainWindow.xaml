@@ -9,8 +9,148 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:agvProject.Views"
         mc:Ignorable="d"
-        Title="AGV 통합 관리 시스템" Height="580" Width="1000">
-    <Grid>
-        
+        Title="AGV 통합 관리 시스템" MinHeight="600" Height="720" MinWidth="900" Width="1280"> <!-- tablet pc size 1280x800 -->
+
+    <Grid Margin="10">
+        <!-- 전체 행 정의 -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- 상단 탭 -->
+            <RowDefinition Height="*"/>
+            <!-- 메인 콘텐츠 -->
+            <RowDefinition Height="Auto"/>
+            <!-- 하단 수동제어 -->
+        </Grid.RowDefinitions>
+
+        <!-- 전체 열 정의 (본문에서만 사용됨) -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.5*"/>
+            <!-- AGV 경로도 -->
+            <ColumnDefinition Width="1.5*"/>
+            <!-- 상태 표시 -->
+            <ColumnDefinition Width="2*"/>
+            <!-- 우측 제어 및 테이블 -->
+        </Grid.ColumnDefinitions>
+
+        <!-- 🔷 1. 상단 탭 -->
+        <TabControl Grid.Row="0" Grid.ColumnSpan="3" Height="40">
+            <TabItem Header="메인 모니터링"/>
+            <TabItem Header="미션 조회"/>
+            <TabItem Header="이벤트 로그"/>
+        </TabControl>
+
+        <!-- 🔷 2. AGV 운행도 및 상태 -->
+        <Border Grid.Row="1" Grid.Column="0" Margin="5" BorderBrush="DarkGray" BorderThickness="1">
+            <!-- 여기에 이미지 or Canvas or 경로 표시용 Grid -->
+            <TextBlock Text="AGV 경로도 / 도식" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+        <!-- 🔷 3. 운반차 A/B 상태 및 기타 상태 박스 -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Top">
+            <GroupBox Header="운반차 A">
+                <StackPanel>
+                    <TextBlock Text="배터리 상태"/>
+                    <ProgressBar Value="70" Height="10"/>
+                    <TextBlock Text="미션 완료도"/>
+                    <ProgressBar Value="40" Height="10"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="운반차 B" Margin="0,10,0,0">
+                <StackPanel>
+                    <TextBlock Text="배터리 상태"/>
+                    <ProgressBar Value="20" Height="10" Foreground="Red"/>
+                    <TextBlock Text="미션 완료도"/>
+                    <ProgressBar Value="0" Height="10"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="창고 상태" Margin="0,10,0,0">
+                <StackPanel>
+                    <TextBlock Text="온도: 15°C" />
+                    <TextBlock Text="습도: 30%" />
+                    <TextBlock Text="비고: 이상 없음" />
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <!-- 🔷 4. 우측 벨트 및 미션 제어 -->
+        <StackPanel Grid.Row="1" Grid.Column="2" Margin="5">
+            <GroupBox Header="컨베이어 벨트 제어">
+                <StackPanel>
+                    <TextBlock Text="벨트 상태" />
+                    <ComboBox SelectedIndex="0">
+                        <ComboBoxItem Content="정지"/>
+                        <ComboBoxItem Content="동작"/>
+                    </ComboBox>
+                    <TextBlock Text="벨트 속도" Margin="0,5,0,0"/>
+                    <Slider Minimum="0" Maximum="100" Value="25"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="적용" Margin="5"/>
+                        <Button Content="초기화"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="미션">
+                <StackPanel>
+                    <TextBox Margin="0,5,0,5"/>
+                    <Button Content="새 미션 등록"/>
+                    <Button Content="모든 미션 취소"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="초기화" Margin="5"/>
+                        <Button Content="일시정지"/>
+                        <Button Content="재시작"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <!-- 🔷 5. 하단 창고 제어 및 입무 목록 -->
+        <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 좌측: 창고 설정 및 수동 제어 -->
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <GroupBox Header="창고 설정">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="온도:" VerticalAlignment="Center" Margin="5"/>
+                        <TextBox Width="50"/>
+                        <TextBlock Text="습도:" VerticalAlignment="Center" Margin="5"/>
+                        <TextBox Width="50"/>
+                        <Button Content="저장" Margin="10,0,0,0"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="시설 수동 제어" Margin="0,10,0,0">
+                    <Button Content="수동 제어 모드 ON" Width="150"/>
+                </GroupBox>
+
+                <GroupBox Header="로봇 수동 제어" Margin="0,10,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="로봇 A:" Margin="5"/>
+                        <Button Content="일시정지" Margin="2"/>
+                        <Button Content="시작" Margin="2"/>
+                        <TextBlock Text="로봇 B:" Margin="10 5 5 5"/>
+                        <Button Content="일시정지" Margin="2"/>
+                        <Button Content="시작" Margin="2"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+
+            <!-- 우측: 입무 목록 -->
+            <GroupBox Header="입무 목록" Grid.Column="1" Margin="10,0,0,0">
+                <DataGrid AutoGenerateColumns="False" Height="150">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="미션 ID" Width="*" />
+                        <DataGridTextColumn Header="적재지" Width="*" />
+                        <DataGridTextColumn Header="상태" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+        </Grid>
     </Grid>
 </mah:MetroWindow>
