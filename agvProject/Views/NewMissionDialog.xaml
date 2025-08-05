@@ -1,0 +1,20 @@
+﻿<mah:MetroWindow x:Class="agvProject.Views.NewMissionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"     
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:agvProject.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner" 
+        ResizeMode="NoResize"
+        SizeToContent="Manual"
+        WindowStyle="SingleBorderWindow"
+        Title="새 미션 등록" Height="400" Width="600">
+    <Grid>
+        <TextBlock Text=" 미션을 입력하세요"/>
+    </Grid>
+</mah:MetroWindow>

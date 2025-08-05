@@ -9,7 +9,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:agvProject.Views"
         mc:Ignorable="d"
-        Title="AGV 통합 관리 시스템" MinHeight="600" Height="720" MinWidth="900" Width="1280">
+        Title="AGV 통합 관리 시스템" Height="720" Width="1280" ResizeMode="NoResize">
 
     <Grid Margin="20">
         <!-- 순서대로 탭 / 상단 Grid / 하단 Grid -->
@@ -82,7 +82,7 @@
 
             <!-- 트랙 지도 -->
             <StackPanel Grid.Column="0" Margin="5">
-                <Image Height="Auto" Width="Auto" Source="/Views/고양잉.jpg" />
+                <Image Height="Auto" Width="Auto" Source="/Views/임시이미지.png" />
             </StackPanel>
 
             <!-- 트럭/로봇 상태 -->
@@ -130,20 +130,20 @@
                         <TextBlock Text="운반차 A" FontSize="15" FontWeight="Bold" Margin="0,0,0,8"/>
 
                         <TextBlock Text="배터리" Margin="10,0,0,5"/>
-                        <ProgressBar Height="15" Value="60" Margin="10,0,10,5"/>
+                        <ProgressBar Height="25" Value="60" Margin="10,0,10,5"/>
 
                         <TextBlock Text="미션 완료도" Margin="10,0,0,5"/>
-                        <ProgressBar Height="15" Value="60" Margin="10,0,10,50"/>
+                        <ProgressBar Height="25" Value="60" Margin="10,0,10,50"/>
                     </StackPanel>
 
                     <StackPanel>
                         <TextBlock Text="운반차 B"  FontSize="15" FontWeight="Bold" Margin="0,0,0,8"/>
 
                         <TextBlock Text="배터리" Margin="10,0,0,5" />
-                        <ProgressBar Height="15" Value="40" Margin="10,0,10,5"/>
+                        <ProgressBar Height="25" Value="40" Margin="10,0,10,5"/>
 
                         <TextBlock Text="미션 완료도" Margin="10,0,0,5"/>
-                        <ProgressBar Height="15" Value="40" Margin="10,0,10,50"/>
+                        <ProgressBar Height="25" Value="40" Margin="10,0,10,50"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -186,28 +186,29 @@
                     <Border BorderBrush="Gray" BorderThickness="1" Padding="10" />
                     <!-- 헤더 -->
                     <Label Content="미션" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
-                    <StackPanel Margin="10" Orientation="Vertical">
+                    <StackPanel Margin="10,10,10,28" Orientation="Vertical">
                         <!-- 미션 선택 + 등록 버튼 -->
                         <StackPanel Orientation="Horizontal" Margin="0,5">
                             <ComboBox Width="120">
                                 <ComboBoxItem Content="미션 1" IsSelected="True"/>
                                 <ComboBoxItem Content="미션 2"/>
                             </ComboBox>
-                            <Button Content="새 미션 등록" Width="100" Margin="10,0,0,0"/>
+                            <Button Content="새 미션 등록" Width="100" Margin="10,0,0,0" Click="NewMission_Click"/>
                         </StackPanel>
                         <!-- 미션 취소 버튼 -->
-                        <Button Content="모든 미션 취소" Margin="0,8,0,4" Width="230"/>
+                        <Button Content="선택 미션 취소" Margin="0,8,0,4" Width="230"/>
+                        <Grid>
+                            <!-- 수직 버튼 3개 -->
+                            <StackPanel Margin="0,20">
+                                <Button Content="일시정지" Margin="0,2" Width="230"/>
+                                <Button Content="재시작" Margin="0,2" Width="230"/>
+                                <Button Content="초기화" Margin="0,2" Width="230"/>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </Grid>
 
-                <Grid>
-                    <!-- 아래 수직 버튼 3개 -->
-                    <StackPanel Margin="0,20">
-                        <Button Content="초기화" Margin="0,2" Width="230"/>
-                        <Button Content="일시정지" Margin="0,2" Width="230"/>
-                        <Button Content="재시작" Margin="0,2" Width="230"/>
-                    </StackPanel>
-                </Grid>
+                
             </StackPanel>
         </Grid>
 
@@ -225,13 +226,13 @@
             <!-- 창고 모니터링 -->
             <Grid Grid.Column="0" Margin="5">
                 <!-- 테두리 박스 -->
-                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="10" />
+                <Border BorderBrush="Gray" BorderThickness="1" Padding="10" />
                 <!-- 헤더 -->
                 <Label Content="창고 모니터링" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
 
-                <StackPanel Margin="10">
+                <StackPanel Margin="0,0,0,17" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <!-- 그리드 설정 -->
-                    <Grid>
+                    <Grid  HorizontalAlignment="Center">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -239,41 +240,41 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="온도 :" Grid.Row="0" Grid.Column="0" Margin="0,2"/>
-                        <TextBlock Text="15 ℃" Grid.Row="0" Grid.Column="1" Margin="5,2"/>
+                        <TextBlock Text="온도 :" Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Right"/>
+                        <TextBlock Text="15 ℃" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-                        <TextBlock Text="습도 :" FontWeight="Normal" Grid.Row="1" Grid.Column="0" Margin="0,2"/>
-                        <TextBlock Text="30 %" Grid.Row="1" Grid.Column="1" Margin="5,2"/>
+                        <TextBlock Text="습도 :" FontWeight="Normal" Grid.Row="1" Grid.Column="0" Margin="5,8,5,5" HorizontalAlignment="Right"/>
+                        <TextBlock Text="30 %" Grid.Row="1" Grid.Column="1" Margin="5,8,5,5"/>
 
-                        <TextBlock Text="비고 :" FontWeight="Normal" Grid.Row="2" Grid.Column="0" Margin="0,2"/>
-                        <TextBlock Text="이상 없음" Grid.Row="2" Grid.Column="1" Margin="5,2"/>
+                        <TextBlock Text="비고 :" FontWeight="Normal" Grid.Row="2" Grid.Column="0" Margin="5,8,5,5" HorizontalAlignment="Right"/>
+                        <TextBlock Text="이상 없음" Grid.Row="2" Grid.Column="1" Margin="5,8,5,5"/>
                     </Grid>
                 </StackPanel>
             </Grid>
 
             <!-- 창고 설정 -->
             <Grid Grid.Column="1" Margin="5">
-                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Background="White" Padding="10"/>
+                <Border BorderBrush="Gray" BorderThickness="1" Background="White" Padding="10"/>
                 <!-- 헤더 -->
                 <Label Content="창고 설정" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
-                <StackPanel Margin="10">
+                <StackPanel Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <!-- 내부 내용 -->
                     <StackPanel Margin="10">
                         <!-- 온도 설정 -->
                         <StackPanel Orientation="Horizontal" Margin="0,2">
                             <TextBlock Text="온도 :" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <TextBox Width="80" />
+                            <TextBox Width="89" />
                         </StackPanel>
                         <!-- 습도 설정 -->
                         <StackPanel Orientation="Horizontal" Margin="0,5">
                             <TextBlock Text="습도 :" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <TextBox Width="80" />
+                            <TextBox Width="89" />
                         </StackPanel>
                         <!-- 저장 버튼 -->
-                        <Button Content="저장" Width="80" HorizontalAlignment="Right" Margin="0,10,0,0"/>
+                        <Button Content="저장" Width="89" HorizontalAlignment="Right" Margin="0,10,0,0"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -285,16 +286,16 @@
                 <Grid Margin="0,0,0,10">
                     <Border BorderBrush="Gray" BorderThickness="1" Padding="10"/>
                     <Label Content="시설 수동 제어" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
-                    <StackPanel Margin="10">
+                    <StackPanel Margin="10,20,10,20">
                         <Button Content="수동 제어 모드 ON" />
                     </StackPanel>
                 </Grid>
 
                 <!-- 적재 -->
-                <Grid Margin="0,50,0,0">
+                <Grid Margin="0,35,0,0">
                     <Border BorderBrush="Gray" BorderThickness="1" Padding="10"/>
                     <Label Content="적재 수동 제어" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
-                    <StackPanel Margin="10">
+                    <StackPanel Margin="10,20,10,20">
                         <Button Content="적재물 투하" />
                     </StackPanel>
                 </Grid>
@@ -308,13 +309,13 @@
                 <StackPanel Margin="10">
                     <TextBlock Text="로봇암 A :" Margin="10,10,0,2"/>
                     <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
-                        <Button Content="일시정지" Margin="0,0,5,0"/>
-                        <Button Content="시작"/>
+                        <Button Content="일시정지" Margin="0,0,5,0" Width="60"/>
+                        <Button Content="시작" Width="60"/>
                     </StackPanel>
                     <TextBlock Text="로봇암 B :" Margin="10,10,0,2"/>
                     <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
-                        <Button Content="일시정지" Margin="0,0,5,0"/>
-                        <Button Content="시작"/>
+                        <Button Content="일시정지" Margin="0,0,5,0" Width="60"/>
+                        <Button Content="시작" Width="60"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -322,7 +323,7 @@
             <!-- 임무 목록 -->
             <Grid Grid.Column="4" Margin="5">
                 <Border BorderBrush="Gray" BorderThickness="1" Padding="10" />
-                <Label Content="업무 목록" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
+                <Label Content="임무 목록" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
 
                 <!-- 데이터 표 -->
                 <DataGrid AutoGenerateColumns="False" Margin="10,10,10,10" HeadersVisibility="Column"
