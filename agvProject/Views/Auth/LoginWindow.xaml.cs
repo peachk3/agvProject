@@ -10,6 +10,13 @@ namespace agvProject.Views.Auth
         public LoginWindow()
         {
             InitializeComponent();
+
+            // 로그인 버튼 클릭 이벤트 핸들러 등록
+            LoginBtn.Click += LoginBtn_Click;
+
+            // 엔터 키 입력 시 로그인 시도
+            UserIdTextBox.KeyDown += LoginWindow_KeyDown;
+            PasswordBox.KeyDown += LoginWindow_KeyDown;
         }
     }
 }

@@ -15,7 +15,7 @@
         WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" TextAlignment="Center" 
-                   TextWrapping="Wrap" FontFamily="Mongolian Baiti" FontSize="28" Margin="20,50,20,20">
+                TextWrapping="Wrap" FontFamily="Mongolian Baiti" FontSize="28" Margin="20,50,20,20">
             <Run Text="AGBee" FontWeight="Bold" FontSize="40"/>
             <LineBreak/>
             
@@ -31,31 +31,33 @@
             
             <!-- 아이디 입력-->
             <TextBox x:Name="UserIdTextBox"
-                     mah:TextBoxHelper.Watermark="Username"
-                     mah:ControlsHelper.CornerRadius="10"
-                     Margin="0,0,0,10"
-                     Height="40"/>
+                    mah:TextBoxHelper.Watermark="Username"
+                    mah:ControlsHelper.CornerRadius="10"
+                    Margin="0,0,0,10"
+                    Height="40"/>
             
             <!-- 비밀번호 입력 -->
             <PasswordBox x:Name="PasswordBox"
-                         mah:TextBoxHelper.Watermark="Password"
-                         mah:ControlsHelper.CornerRadius="10"
-                         Margin="0,0,0,10"
-                         Height="40"/>
+                    mah:TextBoxHelper.Watermark="Password"
+                    mah:ControlsHelper.CornerRadius="10"
+                    Margin="0,0,0,10"
+                    Height="40"/>
             
             <!-- 로그인 버튼 -->
             <Button x:Name="LoginBtn"
                     mah:ControlsHelper.CornerRadius="10"
                     Content="LOGIN"
                     Height="40"
-                    Margin="0,0,0,10"/>
+                    Margin="0,0,0,10"
+                    IsDefault="True"
+                    Click="LoginBtn_Click"/>
             
             <!-- 비밀번호 찾기 링크 -->
             <TextBlock Text="Forgot your password?"
-                       HorizontalAlignment="Center"
-                       Margin="0,10,0,0"
-                       Foreground="LightGray"
-                       Cursor="Hand" />
+                    HorizontalAlignment="Center"
+                    Margin="0,10,0,0"
+                    Foreground="LightGray"
+                    Cursor="Hand" />
         </StackPanel>
     </Grid>
 </mah:MetroWindow>
