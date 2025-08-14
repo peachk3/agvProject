@@ -27,7 +27,7 @@
 
             <!-- 트랙 지도 -->
             <StackPanel Grid.Column="0" Margin="5">
-                <Image Height="Auto" Width="Auto" Source="/Views/임시이미지.png" />
+                <Image Height="Auto" Width="Auto" Source="/Views/고양잉.jpg" />
             </StackPanel>
 
             <!-- 트럭/로봇 상태 -->
