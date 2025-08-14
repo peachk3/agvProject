@@ -11,6 +11,7 @@ namespace agvProject.Views
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new agvProject.ViewModels.MainViewModel();
         }
 
         private void NewMission_Click(object sender, RoutedEventArgs e)
