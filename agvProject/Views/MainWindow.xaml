@@ -1,0 +1,346 @@
+﻿<mah:MetroWindow x:Class="agvProject.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"     
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:agvProject.Views"
+        mc:Ignorable="d"
+        Title="AGV 통합 관리 시스템" Height="720" Width="1280" ResizeMode="NoResize">
+
+    <Grid Margin="20">
+        <!-- 순서대로 탭 / 상단 Grid / 하단 Grid -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1.5*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 상단 탭 -->
+        <TabControl Grid.Row="0" Grid.ColumnSpan="1">
+            <!-- 탭 스타일 커스터마이징 -->
+            <TabControl.Resources>
+                <!-- 탭 항목 스타일 -->
+                <Style TargetType="TabItem">
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Padding" Value="10,5"/>
+                    <Setter Property="MinWidth" Value="80"/>
+                    <Setter Property="Background" Value="#f5f5f5"/>
+                    <!-- 선택X 탭 배경색-->
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <!-- 선택 X 탭 선색 -->
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <!-- 탭 모양 템플릿-->
+                                <Border 
+                                    Name="Border" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    CornerRadius="4,4,0,0"
+                                    Padding="5,3" 
+                                    >
+                                    <ContentPresenter 
+                                                x:Name="ContentSite"
+                                                VerticalAlignment="Center" 
+                                                HorizontalAlignment="Center" 
+                                                ContentSource="Header"
+                                                Margin="6,2"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <!-- 선택O 색 -->
+                                        <Setter TargetName="Border" Property="Background" Value="#FFECB3"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="Gray"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+
+            <TabItem Header="메인 모니터링"/>
+            <TabItem Header="미션 관리">
+                <TabItem.Content>
+                    <local:MissionViewControl/>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem Header="이벤트 로그"/>
+        </TabControl>
+
+        <!-- 상단 정보 Grid -->
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- 트랙 지도 -->
+            <StackPanel Grid.Column="0" Margin="5">
+                <Image Height="Auto" Width="Auto" Source="/Views/임시이미지.png" />
+            </StackPanel>
+
+            <!-- 트럭/로봇 상태 -->
+            <StackPanel Grid.Column="1" Margin="5">
+                <Border BorderBrush="Gray" BorderThickness="1" Margin="5,0,5,5">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="현재 트럭 위치" />
+                        <TextBlock Text="A: 적재 장소" />
+                        <TextBlock Text="B: 컨베이어 벨트" />
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="Gray" BorderThickness="1" Margin="5">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="현재 트럭 상태" />
+                        <TextBlock Text="A: 대기 중" />
+                        <TextBlock Text="B: 이동 중" />
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="Gray" BorderThickness="1" Margin="5">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="현재 수행 상태" />
+                        <TextBlock Text="A: 적재 중" />
+                        <TextBlock Text="B: 충전소로 이동" />
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="Gray" BorderThickness="1" Margin="5">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="창고 상태" />
+                        <TextBlock Text="10% 이용 중" />
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="Gray" BorderThickness="1" Margin="5">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="현재 로봇암 상태" />
+                        <TextBlock Text="A: 이용 가능" />
+                        <TextBlock Text="B: 이용 가능" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="1" Margin="5">
+                <!-- 운반차 A/B -->
+                <StackPanel Grid.Column="2" Margin="5">
+                    <StackPanel>
+                        <TextBlock Text="운반차 A" FontSize="15" FontWeight="Bold" Margin="0,0,0,8"/>
+
+                        <TextBlock Text="배터리" Margin="10,0,0,5"/>
+                        <ProgressBar Height="25" Value="60" Margin="10,0,10,5"/>
+
+                        <TextBlock Text="미션 완료도" Margin="10,0,0,5"/>
+                        <ProgressBar Height="25" Value="60" Margin="10,0,10,50"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="운반차 B"  FontSize="15" FontWeight="Bold" Margin="0,0,0,8"/>
+
+                        <TextBlock Text="배터리" Margin="10,0,0,5" />
+                        <ProgressBar Height="25" Value="40" Margin="10,0,10,5"/>
+
+                        <TextBlock Text="미션 완료도" Margin="10,0,0,5"/>
+                        <ProgressBar Height="25" Value="40" Margin="10,0,10,50"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- 컨베이어 벨트 / 미션 전체 -->
+            <StackPanel Grid.Column="3" Margin="5" Orientation="Vertical">
+                <!-- 컨베이어 벨트 -->
+                <Grid Margin="0,0,0,10">
+                    <Border BorderBrush="Gray" BorderThickness="1" Padding="10"/>
+                    <!-- 헤더 -->
+                    <Label Content="컨베이어 벨트 제어" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
+                    <StackPanel Margin="10" Orientation="Vertical">
+                        <!-- 벨트 상태 / 속도 -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="벨트 상태 :" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox Width="165">
+                                <ComboBoxItem Content="정지" IsSelected="True"/>
+                                <ComboBoxItem Content="작동"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="벨트 속도 :" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox Width="165">
+                                <ComboBoxItem Content="25%" IsSelected="True"/>
+                                <ComboBoxItem Content="50%"/>
+                                <ComboBoxItem Content="100%"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <!-- 버튼 2개 -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,7,0">
+                            <Button Content="적용" Width="60" Margin="0,0,5,0"/>
+                            <Button Content="초기화" Width="60"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </Grid>
+
+                <!-- 미션 -->
+                <Grid>
+                    <Border BorderBrush="Gray" BorderThickness="1" Padding="10" />
+                    <!-- 헤더 -->
+                    <Label Content="미션" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
+                    <StackPanel Margin="10,10,10,28" Orientation="Vertical">
+                        <!-- 미션 선택 + 등록 버튼 -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <ComboBox Width="120">
+                                <ComboBoxItem Content="미션 1" IsSelected="True"/>
+                                <ComboBoxItem Content="미션 2"/>
+                            </ComboBox>
+                            <Button Content="새 미션 등록" Width="100" Margin="10,0,0,0" Click="NewMission_Click"/>
+                        </StackPanel>
+                        <!-- 미션 취소 버튼 -->
+                        <Button Content="선택 미션 취소" Margin="0,8,0,4" Width="230"/>
+                        <Grid>
+                            <!-- 수직 버튼 3개 -->
+                            <StackPanel Margin="0,20">
+                                <Button Content="일시정지" Margin="0,2" Width="230"/>
+                                <Button Content="재시작" Margin="0,2" Width="230"/>
+                                <Button Content="초기화" Margin="0,2" Width="230"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+
+                
+            </StackPanel>
+        </Grid>
+
+        <!-- 하단 제어 Grid -->
+        <Grid Grid.Row="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- 창고 모니터링 -->
+            <Grid Grid.Column="0" Margin="5">
+                <!-- 테두리 박스 -->
+                <Border BorderBrush="Gray" BorderThickness="1" Padding="10" />
+                <!-- 헤더 -->
+                <Label Content="창고 모니터링" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
+
+                <StackPanel Margin="0,0,0,17" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!-- 그리드 설정 -->
+                    <Grid  HorizontalAlignment="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="온도 :" Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Right"/>
+                        <TextBlock Text="15 ℃" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+                        <TextBlock Text="습도 :" FontWeight="Normal" Grid.Row="1" Grid.Column="0" Margin="5,8,5,5" HorizontalAlignment="Right"/>
+                        <TextBlock Text="30 %" Grid.Row="1" Grid.Column="1" Margin="5,8,5,5"/>
+
+                        <TextBlock Text="비고 :" FontWeight="Normal" Grid.Row="2" Grid.Column="0" Margin="5,8,5,5" HorizontalAlignment="Right"/>
+                        <TextBlock Text="이상 없음" Grid.Row="2" Grid.Column="1" Margin="5,8,5,5"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <!-- 창고 설정 -->
+            <Grid Grid.Column="1" Margin="5">
+                <Border BorderBrush="Gray" BorderThickness="1" Background="White" Padding="10"/>
+                <!-- 헤더 -->
+                <Label Content="창고 설정" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
+                <StackPanel Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <!-- 내부 내용 -->
+                    <StackPanel Margin="10">
+                        <!-- 온도 설정 -->
+                        <StackPanel Orientation="Horizontal" Margin="0,2">
+                            <TextBlock Text="온도 :" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBox Width="89" />
+                        </StackPanel>
+                        <!-- 습도 설정 -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Text="습도 :" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBox Width="89" />
+                        </StackPanel>
+                        <!-- 저장 버튼 -->
+                        <Button Content="저장" Width="89" HorizontalAlignment="Right" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+
+            <!-- 시설/적재 수동 제어 -->
+            <StackPanel Grid.Column="2" Margin="5">
+                <!-- 시설 -->
+                <Grid Margin="0,0,0,10">
+                    <Border BorderBrush="Gray" BorderThickness="1" Padding="10"/>
+                    <Label Content="시설 수동 제어" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
+                    <StackPanel Margin="10,20,10,20">
+                        <Button Content="수동 제어 모드 ON" />
+                    </StackPanel>
+                </Grid>
+
+                <!-- 적재 -->
+                <Grid Margin="0,35,0,0">
+                    <Border BorderBrush="Gray" BorderThickness="1" Padding="10"/>
+                    <Label Content="적재 수동 제어" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
+                    <StackPanel Margin="10,20,10,20">
+                        <Button Content="적재물 투하" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+
+            <!-- 로봇암 수동 제어 -->
+            <Grid Grid.Column="3" Margin="5">
+                <Border BorderBrush="Gray" BorderThickness="1" Padding="10"/>
+                <Label Content="로봇암 수동 제어" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
+                <StackPanel Margin="10">
+                    <TextBlock Text="로봇암 A :" Margin="10,10,0,2"/>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
+                        <Button Content="일시정지" Margin="0,0,5,0" Width="60"/>
+                        <Button Content="시작" Width="60"/>
+                    </StackPanel>
+                    <TextBlock Text="로봇암 B :" Margin="10,10,0,2"/>
+                    <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
+                        <Button Content="일시정지" Margin="0,0,5,0" Width="60"/>
+                        <Button Content="시작" Width="60"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <!-- 임무 목록 -->
+            <Grid Grid.Column="4" Margin="5">
+                <Border BorderBrush="Gray" BorderThickness="1" Padding="10" />
+                <Label Content="임무 목록" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
+
+                <!-- 데이터 표 -->
+                <DataGrid AutoGenerateColumns="False" Margin="10,10,10,10" HeadersVisibility="Column"
+                          CanUserAddRows="False" RowHeaderWidth="0" ColumnHeaderHeight="30">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="no." Width="*" />
+                        <DataGridTextColumn Header="미션 ID" Width="3*" />
+                        <DataGridTextColumn Header="적재지" Width="3*" />
+                        <DataGridTextColumn Header="상태" Width="3*" />
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </Grid>
+        </Grid>
+    </Grid>
+</mah:MetroWindow>
