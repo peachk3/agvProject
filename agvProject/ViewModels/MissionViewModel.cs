@@ -17,22 +17,19 @@ namespace agvProject.ViewModels
         private DateTime _selectedDate;
         private string _selectedMissionLocation;
         private string _searchText;
-
         public MissionViewModel(IDialogCoordinator dialogCoordinator)
         {
             _dialogCoordinator = dialogCoordinator;
             _selectedDate = DateTime.Today;
-            
+
             // 명령어 초기화
             SearchCommand = new RelayCommand(ExecuteSearch, CanExecuteSearch);
             AddMissionCommand = new RelayCommand(ExecuteAddMission);
             CancelMissionCommand = new RelayCommand(ExecuteCancelMission, CanExecuteCancelMission);
             RefreshCommand = new RelayCommand(ExecuteRefresh);
-            SelectedAllCommand = new RelayCommand(ExecuteSelectedAll);
-            UnSelectedAllCommand = new RelayCommand(ExecuteUnSelectedAll);
             ExportCommand = new RelayCommand(ExecuteExport, CanExecuteExport);
+            ToggleSelectAllCommand = new RelayCommand(ExecuteToggleSelectAll);
 
-            // 초기 데이터 로드
             LoadInitialData();
         }
 
@@ -43,7 +40,14 @@ namespace agvProject.ViewModels
             get => _missions;
             set
             {
+                if (_missions != null)
+                    _missions.CollectionChanged -= Missions_CollectionChanged;
+
                 _missions = value;
+
+                if (_missions != null)
+                    _missions.CollectionChanged += Missions_CollectionChanged;
+
                 OnPropertyChanged(nameof(Missions));
             }
         }
@@ -51,52 +55,34 @@ namespace agvProject.ViewModels
         public string SelectedAgv
         {
             get => _selectedAgv;
-            set
-            {
-                _selectedAgv = value;
-                OnPropertyChanged(nameof(SelectedAgv));
-            }
+            set { _selectedAgv = value; OnPropertyChanged(nameof(SelectedAgv)); }
         }
 
         public string SelectedRobotArm
         {
             get => _selectedRobotArm;
-            set
-            {
-                _selectedRobotArm = value;
-                OnPropertyChanged(nameof(SelectedRobotArm));
-            }
+            set { _selectedRobotArm = value; OnPropertyChanged(nameof(SelectedRobotArm)); }
         }
 
         public DateTime SelectedDate
         {
             get => _selectedDate;
-            set
-            {
-                _selectedDate = value;
-                OnPropertyChanged(nameof(SelectedDate));
-            }
+            set { _selectedDate = value; OnPropertyChanged(nameof(SelectedDate)); }
         }
 
         public string SelectedMissionLocation
         {
             get => _selectedMissionLocation;
-            set
-            {
-                _selectedMissionLocation = value;
-                OnPropertyChanged(nameof(SelectedMissionLocation));
-            }
+            set { _selectedMissionLocation = value; OnPropertyChanged(nameof(SelectedMissionLocation)); }
         }
 
         public string SearchText
         {
             get => _searchText;
-            set
-            {
-                _searchText = value;
-                OnPropertyChanged(nameof(SearchText));
-            }
+            set { _searchText = value; OnPropertyChanged(nameof(SearchText)); }
         }
+
+
 
         #endregion
 
@@ -106,55 +92,37 @@ namespace agvProject.ViewModels
         public ICommand AddMissionCommand { get; }
         public ICommand CancelMissionCommand { get; }
         public ICommand RefreshCommand { get; }
-        public ICommand SelectedAllCommand { get; }
-        public ICommand UnSelectedAllCommand { get; }
         public ICommand ExportCommand { get; }
+        public ICommand ToggleSelectAllCommand { get; }
 
         #endregion
 
         #region Command Methods
 
-        private void ExecuteSearch()
-        {
-            // 검색 로직 구현
-            LoadMissions();
-        }
+        private void ExecuteSearch() => LoadMissions();
 
         private bool CanExecuteSearch()
-        {
-            return !string.IsNullOrEmpty(SearchText) || 
-                   !string.IsNullOrEmpty(SelectedAgv) || 
-                   !string.IsNullOrEmpty(SelectedRobotArm);
-        }
+            => !string.IsNullOrEmpty(SearchText)
+               || !string.IsNullOrEmpty(SelectedAgv)
+               || !string.IsNullOrEmpty(SelectedRobotArm);
 
         private async void ExecuteAddMission()
         {
             try
             {
-                // 미션 추가 다이얼로그 표시
                 var result = await _dialogCoordinator.ShowMessageAsync(
-                    this, 
-                    "미션 추가", 
-                    "새로운 미션을 추가하시겠습니까?", 
+                    this, "미션 추가", "새로운 미션을 추가하시겠습니까?",
                     MessageDialogStyle.AffirmativeAndNegative);
 
                 if (result == MessageDialogResult.Affirmative)
                 {
-                    // 미션 추가 로직 구현
-                    await _dialogCoordinator.ShowMessageAsync(
-                        this, 
-                        "성공", 
-                        "미션이 추가되었습니다.");
-                    
-                    LoadMissions(); // 목록 새로고침
+                    await _dialogCoordinator.ShowMessageAsync(this, "성공", "미션이 추가되었습니다.");
+                    LoadMissions();
                 }
             }
             catch (Exception ex)
             {
-                await _dialogCoordinator.ShowMessageAsync(
-                    this, 
-                    "오류", 
-                    $"미션 추가 중 오류가 발생했습니다: {ex.Message}");
+                await _dialogCoordinator.ShowMessageAsync(this, "오류", $"미션 추가 중 오류: {ex.Message}");
             }
         }
 
@@ -163,111 +131,85 @@ namespace agvProject.ViewModels
             try
             {
                 var selectedMissions = Missions.Where(m => m.IsSelected).ToList();
-                
                 if (!selectedMissions.Any())
                 {
-                    await _dialogCoordinator.ShowMessageAsync(
-                        this, 
-                        "알림", 
-                        "취소할 미션을 선택해주세요.");
+                    await _dialogCoordinator.ShowMessageAsync(this, "알림", "취소할 미션을 선택해주세요.");
                     return;
                 }
 
                 var result = await _dialogCoordinator.ShowMessageAsync(
-                    this, 
-                    "미션 취소", 
-                    $"선택된 {selectedMissions.Count}개의 미션을 취소하시겠습니까?", 
+                    this, "미션 취소",
+                    $"선택된 {selectedMissions.Count}개의 미션을 취소하시겠습니까?",
                     MessageDialogStyle.AffirmativeAndNegative);
 
                 if (result == MessageDialogResult.Affirmative)
                 {
-                    // 미션 취소 로직 구현
                     foreach (var mission in selectedMissions)
-                    {
                         mission.Status = MissionStatus.Canceled;
-                    }
-                    
-                    await _dialogCoordinator.ShowMessageAsync(
-                        this, 
-                        "성공", 
-                        "선택된 미션이 취소되었습니다.");
+
+                    await _dialogCoordinator.ShowMessageAsync(this, "성공", "선택된 미션이 취소되었습니다.");
                 }
             }
             catch (Exception ex)
             {
-                await _dialogCoordinator.ShowMessageAsync(
-                    this, 
-                    "오류", 
-                    $"미션 취소 중 오류가 발생했습니다: {ex.Message}");
+                await _dialogCoordinator.ShowMessageAsync(this, "오류", $"미션 취소 중 오류: {ex.Message}");
             }
         }
 
-        private bool CanExecuteCancelMission()
-        {
-            return Missions?.Any(m => m.IsSelected) == true;
-        }
+        private bool CanExecuteCancelMission() => Missions?.Any(m => m.IsSelected) == true;
 
-        private void ExecuteRefresh()
-        {
-            LoadMissions();
-        }
+        private void ExecuteRefresh() => LoadMissions();
 
-        private void ExecuteSelectedAll()
+        /// <summary>
+        /// 헤더 버튼 클릭 시 전체 선택/해제 토글
+        /// </summary>
+        private void ExecuteToggleSelectAll()
         {
-            if (Missions != null)
+            if (Missions == null || Missions.Count == 0) return;
+
+            // 현재 모든 미션이 선택되어 있는지 확인
+            bool allSelected = Missions.All(m => m.IsSelected);
+
+            if (allSelected)
             {
-                foreach (var mission in Missions)
-                {
-                    mission.IsSelected = true;
-                }
-            }
-        }
-
-        private void ExecuteUnSelectedAll()
-        {
-            if (Missions != null)
-            {
+                // 모두 선택되어 있으면 → 전체 해제
                 foreach (var mission in Missions)
                 {
                     mission.IsSelected = false;
                 }
             }
+            else
+            {
+                // 하나라도 선택 안되어 있으면 → 전체 선택
+                foreach (var mission in Missions)
+                {
+                    mission.IsSelected = true;
+                }
+            }
+
+            // 토글 완료 (버튼 텍스트 업데이트 불필요)
         }
 
         private async void ExecuteExport()
         {
             try
             {
-                var selectedMissions = Missions?.Where(m => m.IsSelected).ToList();
-                
-                if (selectedMissions == null || !selectedMissions.Any())
+                var selected = Missions?.Where(m => m.IsSelected).ToList();
+                if (selected == null || !selected.Any())
                 {
-                    await _dialogCoordinator.ShowMessageAsync(
-                        this, 
-                        "알림", 
-                        "내보낼 미션을 선택해주세요.");
+                    await _dialogCoordinator.ShowMessageAsync(this, "알림", "내보낼 미션을 선택해주세요.");
                     return;
                 }
-
-                // 내보내기 로직 구현
-                await _dialogCoordinator.ShowMessageAsync(
-                    this, 
-                    "성공", 
-                    $"선택된 {selectedMissions.Count}개의 미션이 내보내기되었습니다.");
+                await _dialogCoordinator.ShowMessageAsync(this, "성공",
+                    $"선택된 {selected.Count}개의 미션이 내보내기되었습니다.");
             }
             catch (Exception ex)
             {
-                await _dialogCoordinator.ShowMessageAsync(
-                    this, 
-                    "오류", 
-                    $"내보내기 중 오류가 발생했습니다: {ex.Message}");
+                await _dialogCoordinator.ShowMessageAsync(this, "오류", $"내보내기 중 오류: {ex.Message}");
             }
         }
 
-        private bool CanExecuteExport()
-        {
-            return Missions?.Any(m => m.IsSelected) == true;
-        }
+        private bool CanExecuteExport() => Missions?.Any(m => m.IsSelected) == true;
 
         #endregion
 
@@ -275,8 +217,7 @@ namespace agvProject.ViewModels
 
         private void LoadInitialData()
         {
-            // 샘플 데이터 로드
-            Missions = new ObservableCollection<Mission>
+            var missions = new ObservableCollection<Mission>
             {
                 new Mission
                 {
@@ -317,14 +258,35 @@ namespace agvProject.ViewModels
                     AddInfo = "AGV-01가 분류장에서 토출구로 이동"
                 }
             };
+
+            // 각 미션에 PropertyChanged 이벤트 연결
+            foreach (var mission in missions)
+                mission.PropertyChanged += Mission_PropertyChanged;
+
+            Missions = missions;
         }
 
-        private void LoadMissions()
+        private void Missions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            // 실제 데이터베이스나 서비스에서 미션 데이터를 로드하는 로직
-            // 현재는 샘플 데이터를 사용
-            LoadInitialData();
+            if (e.NewItems != null)
+                foreach (Mission mission in e.NewItems)
+                    mission.PropertyChanged += Mission_PropertyChanged;
+
+            if (e.OldItems != null)
+                foreach (Mission mission in e.OldItems)
+                    mission.PropertyChanged -= Mission_PropertyChanged;
+
         }
+
+        /// <summary>
+        /// 개별 미션의 IsSelected 상태 변경 시 호출
+        /// </summary>
+        private void Mission_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // 필요시 추가 로직 작성
+        }
+
+        private void LoadMissions() => LoadInitialData();
 
         #endregion
 
@@ -333,9 +295,7 @@ namespace agvProject.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         #endregion
     }

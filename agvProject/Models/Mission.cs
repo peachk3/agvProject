@@ -18,6 +18,7 @@ namespace agvProject.Models
         private string _addInfo;
         private bool _isSelected;
 
+        // 기존 속성들은 그대로 유지...
         public string MissionId
         {
             get => _missionId;
@@ -128,13 +129,20 @@ namespace agvProject.Models
             }
         }
 
+        // 🔥 핵심 버그 수정: IsSelected 속성
         public bool IsSelected
         {
             get => _isSelected;
             set
             {
-                _isSelected = value;
-                OnPropertyChanged(nameof(IsSelected));
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+
+                    //디버그용
+                    System.Diagnostics.Debug.WriteLine($"Mission: {MissionId} : IsSelected = {value}");
+                }
             }
         }
 
@@ -148,10 +156,10 @@ namespace agvProject.Models
 
     public enum MissionStatus
     {
-        Standby, //대기
-        Processing, //진행중
-        Completed, //완료
-        Error, //오류
-        Canceled //취소
+        Standby,    // 대기
+        Processing, // 진행중
+        Completed,  // 완료
+        Error,      // 오류
+        Canceled    // 취소
     }
 }

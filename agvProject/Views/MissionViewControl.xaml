@@ -12,7 +12,7 @@
             mc:Ignorable="d"
             d:DataContext="{d:DesignInstance Type=viewModels:MissionViewModel}">
 
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
         <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -73,9 +73,9 @@
                         <Button Content="미션 추가" Width="75" Height="30" Margin="0,0,8,0"
                             Background="#c2a979" Foreground="White"
                             Command="{Binding AddMissionCommand}"/>
-                        <Button Content="미션 취소" Width="75" Height="30" Margin="0,0,8,0"
+                        <!--<Button Content="미션 취소" Width="75" Height="30" Margin="0,0,8,0"
                             Background="#d9534f" Foreground="White"
-                            Command="{Binding CancelMissionCommand}"/>
+                            Command="{Binding CancelMissionCommand}"/> -->
                         <Button Content="새로고침" Width="75" Height="30"
                             Background="#F5F5F5" Foreground="Black"
                             BorderBrush="#CCCCCC" BorderThickness="1"
@@ -120,65 +120,235 @@
                 </Grid>
             </Border>
 
-            <!-- 미션 목록 영역 -->
+            <!-- 미션 목록 영역 readonly True -->
             <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1">
                 <DataGrid x:Name="MissionDataGrid" 
-                    AutoGenerateColumns="False"
-                    CanUserAddRows="False"
-                    IsReadOnly="True"
-                    GridLinesVisibility="Horizontal"
-                    HorizontalGridLinesBrush="LightGray"
-                    HeadersVisibility="Column"
-                    MinHeight="200"
-                    ItemsSource="{Binding Missions}">
+        AutoGenerateColumns="False"
+        CanUserAddRows="False"
+        IsReadOnly="True" 
+        GridLinesVisibility="Horizontal"
+        HorizontalGridLinesBrush="LightGray"
+        HeadersVisibility="Column"
+        MinHeight="200"
+        VerticalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Disabled"
+        ItemsSource="{Binding Missions}">
+
+                    <DataGrid.Resources>
+                        <!-- 기본 셀 스타일 -->
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="ClipToBounds" Value="True" />
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        </Style>
+
+                        <!-- 비고 셀 스타일 -->
+                        <Style x:Key="RemarkCellStyle" TargetType="DataGridCell">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Text}"/>
+                            <Setter Property="Opacity" Value="1"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Text}"/>
+                                    <Setter Property="Opacity" Value="1"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Text}"/>
+                                    <Setter Property="Opacity" Value="1"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+
+                        <!-- 텍스트 가운데 정렬 스타일 -->
+                        <Style x:Key="CenterTextCellTextBlock" TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="TextAlignment" Value="Center"/>
+                        </Style>
+
+                        <!-- 개별 체크박스용 스타일 (필요함!) -->
+                        <Style x:Key="FlatCheckBoxStyle" TargetType="CheckBox">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="CheckBox">
+                                        <Grid Width="18" Height="18">
+                                            <Border x:Name="Box"
+                                        CornerRadius="2"
+                                        BorderThickness="1"
+                                        Background="Transparent"
+                                        BorderBrush="{DynamicResource MahApps.Brushes.Control.Border}"/>
+                                            <!-- 체크(✓) -->
+                                            <Path x:Name="Tick"
+                                      Data="M 3 9 L 7 13 L 15 5"
+                                      Stroke="{DynamicResource MahApps.Brushes.Accent}"
+                                      StrokeThickness="2"
+                                      StrokeStartLineCap="Round"
+                                      StrokeEndLineCap="Round"
+                                      StrokeLineJoin="Round"
+                                      Visibility="Collapsed"/>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="Tick" Property="Visibility" Value="Visible"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter TargetName="Box" Property="Opacity" Value="0.5"/>
+                                                <Setter TargetName="Tick" Property="Opacity" Value="0.5"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="MinHeight" Value="30"/>
+                        </Style>
+                    </DataGrid.RowStyle>
+
                     <DataGrid.Columns>
-                        <DataGridCheckBoxColumn Header="선택" Binding="{Binding IsSelected}" Width="50"/>
+                        <!-- 🔥 헤더: 버튼, 개별: 체크박스 -->
+                        <DataGridCheckBoxColumn Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="60"
+                                    IsReadOnly="False">
 
-                        <DataGridTextColumn Header="미션 ID" Binding="{Binding MissionId}" Width="80"/>
+                            <!-- 개별 체크박스 스타일 -->
+                            <DataGridCheckBoxColumn.ElementStyle>
+                                <Style TargetType="CheckBox" BasedOn="{StaticResource FlatCheckBoxStyle}">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridCheckBoxColumn.ElementStyle>
 
-                        <DataGridTextColumn Header="미션 등록시간" Binding="{Binding AddMissionTime, StringFormat=yyyy-MM-dd HH:mm}" Width="130"/>
+                            <!-- 헤더 버튼 -->
+                            <!-- 오렌지 색감 기본 버전 -->
+                            <DataGridCheckBoxColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <Button Command="{Binding DataContext.ToggleSelectAllCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch"
+                                                    BorderThickness="0"
+                                                    Margin="0"
+                                                    Cursor="Hand">
+                                                    <Button.Background>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                            <GradientStop Color="#FF9800" Offset="0"/>
+                                                            <GradientStop Color="#F57C00" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </Button.Background>
 
-                        <DataGridTextColumn Header="공정명" Binding="{Binding ProcessName}" Width="100"/>
+                                                    <Button.Content>
+                                                        <StackPanel Orientation="Horizontal" 
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center">
+                                                            <TextBlock Text="☑" FontSize="12" Margin="0,0,3,0" Foreground="White"/>
+                                                            <TextBlock Text="선택" 
+                                                       Foreground="White" 
+                                                       FontSize="10" 
+                                                       FontWeight="SemiBold"/>
+                                                        </StackPanel>
+                                                    </Button.Content>
 
-                        <DataGridTextColumn Header="출발지" Binding="{Binding StartLocation}" Width="100"/>
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background">
+                                                                        <Setter.Value>
+                                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                                <GradientStop Color="#FFB74D" Offset="0"/>
+                                                                                <GradientStop Color="#FF8F00" Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Trigger>
+                                                                <Trigger Property="IsPressed" Value="True">
+                                                                    <Setter Property="Background">
+                                                                        <Setter.Value>
+                                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                                <GradientStop Color="#F57C00" Offset="0"/>
+                                                                                <GradientStop Color="#E65100" Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridCheckBoxColumn.HeaderStyle>
+                        </DataGridCheckBoxColumn>
 
-                        <DataGridTextColumn Header="전체수량" Binding="{Binding Total}" Width="80"/>
+                        <!-- 나머지 컬럼들 -->
+                        <DataGridTextColumn Header="미션 ID" Binding="{Binding MissionId}" Width="80" IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterTextCellTextBlock}"/>
 
-                        <DataGridTextColumn Header="미션시작시간" Binding="{Binding MissionStartTime, StringFormat=yyyy-MM-dd HH:mm}" Width="130"/>
+                        <DataGridTextColumn Header="미션 등록시간" Binding="{Binding AddMissionTime, StringFormat=yyyy-MM-dd HH:mm}" Width="130" IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterTextCellTextBlock}"/>
 
-                        <DataGridTextColumn Header="목적지" Binding="{Binding FinalLocation}" Width="100"/>
+                        <DataGridTextColumn Header="공정명" Binding="{Binding ProcessName}" Width="100" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="상태" Binding="{Binding Status}" Width="80"/>
+                        <DataGridTextColumn Header="출발지" Binding="{Binding StartLocation}" Width="100" IsReadOnly="True"/>
 
-                        <DataGridTextColumn Header="미션종료시간" Binding="{Binding MissionEndTime, StringFormat=yyyy-MM-dd HH:mm}" Width="130"/>
+                        <DataGridTextColumn Header="전체수량" Binding="{Binding Total}" Width="80" IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterTextCellTextBlock}"/>
 
-                        <DataGridTextColumn Header="소요 시간" Binding="{Binding Duration, StringFormat=hh\\:mm}" Width="100"/>
+                        <DataGridTextColumn Header="미션시작시간" Binding="{Binding MissionStartTime, StringFormat=yyyy-MM-dd HH:mm}" Width="130" IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterTextCellTextBlock}"/>
 
-                        <DataGridTextColumn Header="비고" Binding="{Binding AddInfo}" Width="*"/>
+                        <DataGridTextColumn Header="목적지" Binding="{Binding FinalLocation}" Width="100" IsReadOnly="True"/>
+
+                        <DataGridTextColumn Header="상태" Binding="{Binding Status}" Width="80" IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterTextCellTextBlock}"/>
+
+                        <DataGridTextColumn Header="미션종료시간" Binding="{Binding MissionEndTime, StringFormat=yyyy-MM-dd HH:mm}" Width="130" IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterTextCellTextBlock}"/>
+
+                        <DataGridTextColumn Header="소요 시간" Binding="{Binding Duration, StringFormat=hh\\:mm}" Width="100" IsReadOnly="True"
+                                ElementStyle="{StaticResource CenterTextCellTextBlock}"/>
+
+                        <!-- 비고 컬럼 -->
+                        <DataGridTemplateColumn Header="비고"
+                                    Width="*"
+                                    MinWidth="180"                
+                                    IsReadOnly="True"
+                                    CellStyle="{StaticResource RemarkCellStyle}">
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Disabled"
+                                      CanContentScroll="False">
+                                        <TextBlock Text="{Binding AddInfo}"
+                                       TextWrapping="NoWrap"
+                                       Margin="5,0"
+                                       Foreground="{DynamicResource MahApps.Brushes.Text}"/>
+                                    </ScrollViewer>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
-
             <!-- 하단 버튼 영역 -->
             <Grid Grid.Row="3" Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
-                <!-- 왼쪽: 전체 선택/해제 버튼 -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Content="전체선택" Width="80" Height="32" Margin="0,0,10,0" 
-                        Command="{Binding SelectedAllCommand}"/>
-                    <Button Content="전체해제" Width="80" Height="32" 
-                        Command="{Binding UnSelectedAllCommand}"/>
-                </StackPanel>
-
-                <!-- 오른쪽: 내보내기 버튼 -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="내보내기" Width="80" Height="32" 
-                        Command="{Binding ExportCommand}"/>
-                </StackPanel>
             </Grid>
         </Grid>
     </ScrollViewer>
