@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Images\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <None Remove="Images\**" />
+    <Page Remove="Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Views\고양잉.jpg" />
   </ItemGroup>
 
@@ -22,14 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
     <Folder Include="Models\" />
+    <Folder Include="Styles\" />
     <Folder Include="ViewModels\Auth\" />
-    <Folder Include="Views\Auth\Styles\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Views\img\logo.png">
+    <Resource Include="Views\Images\logo.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\고양잉.jpg" />

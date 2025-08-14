@@ -66,7 +66,11 @@
             </TabControl.Resources>
 
             <TabItem Header="메인 모니터링"/>
-            <TabItem Header="미션 조회"/>
+            <TabItem Header="미션 관리">
+                <TabItem.Content>
+                    <local:MissionViewControl/>
+                </TabItem.Content>
+            </TabItem>
             <TabItem Header="이벤트 로그"/>
         </TabControl>
 
