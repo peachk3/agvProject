@@ -273,14 +273,34 @@
                 <Label Content="임무 목록" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
 
                 <!-- 데이터 표 -->
-                <DataGrid AutoGenerateColumns="False" Margin="10,10,10,10" HeadersVisibility="Column"
+                <DataGrid ItemsSource="{Binding StartedMissions}" AutoGenerateColumns="False" Margin="10,10,10,10" HeadersVisibility="Column"
                           CanUserAddRows="False" RowHeaderWidth="0" ColumnHeaderHeight="30">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="no." Width="*"/>
-                        <DataGridTextColumn Header="미션 ID" Width="3*"/>
-                        <DataGridTextColumn Header="출발지" Width="2.6*"/>
-                        <DataGridTextColumn Header="도착지" Width="2.6*"/>
-                        <DataGridTextColumn Header="상태" Width="2.6*"/>
+                        <DataGridTextColumn Header="no." Binding="{Binding RowNo}" Width="*" />
+                        <DataGridTextColumn Header="미션 ID" Binding="{Binding Name}" Width="3*"/>
+                        <DataGridTemplateColumn Header="출발지" Width="2.6*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="-" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="도착지" Width="2.6*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="-" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="상태" Width="2.6*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="진행중" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

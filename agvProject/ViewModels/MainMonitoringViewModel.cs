@@ -32,6 +32,14 @@ namespace agvProject.ViewModels
             set => SetProperty(ref _selectedMission, value);
         }
 
+        // 시작 항목
+        private ObservableCollection<MissionAddTest> _startedMissions = new();
+        public ObservableCollection<MissionAddTest> StartedMissions
+        {
+            get => _startedMissions;
+            set => SetProperty(ref _startedMissions, value);
+        }
+
         public MainMonitoringViewModel(IDialogCoordinator dialogCoordinator = null)
         {
             dialog = dialogCoordinator ?? DialogCoordinator.Instance; // fallback
@@ -117,7 +125,17 @@ namespace agvProject.ViewModels
                 MessageBox.Show("미션을 선택하세요.", "알림");
                 return;
             }
-            MessageBox.Show($"[{SelectedMission.Id}] {SelectedMission.Name} 시작합니다.", "미션 시작");
+
+            var row = new MissionAddTest
+            {
+                Id = SelectedMission.Id,
+                Name = SelectedMission.Name,
+                Num = SelectedMission.Num,
+                RowNo = StartedMissions.Count + 1   // ← 자동 순번
+            };
+
+            StartedMissions.Add(row);
+            MessageBox.Show($"[{row.Id}] {row.Name} 시작합니다.", "미션 시작");
         }
     }
 }
