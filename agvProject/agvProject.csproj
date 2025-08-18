@@ -38,8 +38,8 @@
     <Resource Include="Views\Images\logo.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Views\고양잉.jpg" />
-    <Resource Include="Views\임시이미지.png" />
+    <Resource Include="Views\Images\고양잉.jpg" />
+    <Resource Include="Views\Images\임시이미지.png" />
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@
     <!-- MainWindow에서 탭 아래로 내려가던 '상단 Grid'와 '하단 Grid'를 그대로 이동 -->
     <Grid>
         <!-- 순서대로 탭 / 상단 Grid / 하단 Grid 에서
-             여기서는 탭을 제외하고 '상단 Grid(3*)'와 '하단 Grid(1.5*)'만 구성 -->
+            여기서는 탭을 제외하고 '상단 Grid(3*)'와 '하단 Grid(1.5*)'만 구성 -->
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="1.5*"/>
@@ -27,7 +27,9 @@
 
             <!-- 트랙 지도 -->
             <StackPanel Grid.Column="0" Margin="5">
-                <Image Height="Auto" Width="Auto" Source="/Views/고양잉.jpg" />
+
+                <Image Height="Auto" Width="Auto" Source="/Views/Images/임시이미지.png" />
+
             </StackPanel>
 
             <!-- 트럭/로봇 상태 -->
