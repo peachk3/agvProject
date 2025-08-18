@@ -1,10 +1,12 @@
-﻿using System;
+﻿using agvProject.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using MahApps.Metro.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -24,6 +26,11 @@ namespace agvProject.Views
             InitializeComponent();
         }
 
-        private void NewMission_Click(object sender, RoutedEventArgs e) { }
+        //private void NewMission_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var dialog = new NewMissionDialog();
+        //    dialog.Owner = Window.GetWindow(this);      // UserControl에선 바로 Owner = this 못씀
+        //    dialog.ShowDialog();                   
+        //}
     }
 }

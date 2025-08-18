@@ -1,17 +1,15 @@
-﻿using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MahApps.Metro.Controls.Dialogs;
+using NLog;
 
 namespace agvProject.Helpers
 {
-    class Common
+    internal static class Common
     {
-        //NLogs 인스턴스
         public static readonly Logger LOGGER = LogManager.GetCurrentClassLogger();
 
-        public static readonly string CONNSTR = "Server=127.0.0.1:3306;Database=Docker MySQL;Uid=root;Pwd=12345;Charset=utf8\"";
+        public static readonly string CONNSTR =
+            "Server=localhost;Port=3306;Database=agv_test;Uid=root;Password=12345;CharSet=utf8mb4;SslMode=none";
+
+        public static readonly IDialogCoordinator DIALOGCOORDINATOR = DialogCoordinator.Instance;
     }
 }

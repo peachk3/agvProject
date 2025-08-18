@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:local="clr-namespace:agvProject.Views"
+             xmlns:local="clr-namespace:agvProject.Views"       
              mc:Ignorable="d">
 
     <!-- MainWindow에서 탭 아래로 내려가던 '상단 Grid'와 '하단 Grid'를 그대로 이동 -->
@@ -68,6 +68,7 @@
                         <TextBlock Text="B: 이용 가능" />
                     </StackPanel>
                 </Border>
+                <Button Content="새 미션 등록" Width="100" Margin="10,0,0,0"  Command="{Binding NewMissionCommand}"/>
             </StackPanel>
 
             <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="1" Margin="5">
@@ -136,14 +137,18 @@
                     <StackPanel Margin="10,10,10,28" Orientation="Vertical">
                         <!-- 미션 선택 + 등록 버튼 -->
                         <StackPanel Orientation="Horizontal" Margin="0,5">
-                            <ComboBox Width="120">
-                                <ComboBoxItem Content="미션 1" IsSelected="True"/>
-                                <ComboBoxItem Content="미션 2"/>
-                            </ComboBox>
-                            <Button Content="새 미션 등록" Width="100" Margin="10,0,0,0" Click="NewMission_Click"/>
+                            <ComboBox Width="120"
+                                      ItemsSource="{Binding Missions}"
+                                      DisplayMemberPath="Name"
+                                      SelectedItem="{Binding SelectedMission}" />
+                            <Button Content="미션 시작"
+                                    Width="100"
+                                    Margin="10,0,0,0"
+                                    Command="{Binding StartMissionCommand}" />
                         </StackPanel>
                         <!-- 미션 취소 버튼 -->
                         <Button Content="선택 미션 취소" Margin="0,8,0,4" Width="230"/>
+                        
                         <Grid>
                             <!-- 수직 버튼 3개 -->
                             <StackPanel Margin="0,20">
@@ -273,8 +278,9 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="no." Width="*"/>
                         <DataGridTextColumn Header="미션 ID" Width="3*"/>
-                        <DataGridTextColumn Header="적재지" Width="3*"/>
-                        <DataGridTextColumn Header="상태" Width="3*"/>
+                        <DataGridTextColumn Header="출발지" Width="2.6*"/>
+                        <DataGridTextColumn Header="도착지" Width="2.6*"/>
+                        <DataGridTextColumn Header="상태" Width="2.6*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

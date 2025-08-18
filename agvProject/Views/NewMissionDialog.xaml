@@ -15,6 +15,12 @@
         WindowStyle="SingleBorderWindow"
         Title="새 미션 등록" Height="400" Width="600">
     <Grid>
-        <TextBlock Text=" 미션을 입력하세요"/>
+        <TextBox x:Name="NameBox" HorizontalAlignment="Center" Margin="0,143,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="NumBox" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Margin="0,195,0,0"/>
+        <Label Content="공정명" HorizontalAlignment="Left" Margin="235,117,0,0" VerticalAlignment="Top"/>
+        <Label Content="수량" HorizontalAlignment="Left" Margin="236,171,0,0" VerticalAlignment="Top"/>
+        <Button Content="등록" HorizontalAlignment="Left" Margin="169,259,0,0" VerticalAlignment="Top" Width="120" Click="Save_Click"/>
+        <Button Content="취소" HorizontalAlignment="Left" Margin="311,259,0,0" VerticalAlignment="Top" Width="120" IsCancel="True"/>
+
     </Grid>
 </mah:MetroWindow>

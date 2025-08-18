@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
 
 namespace agvProject.Views
@@ -11,16 +12,9 @@ namespace agvProject.Views
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new agvProject.ViewModels.MainViewModel();
+            DataContext = new agvProject.ViewModels.MainViewModel(DialogCoordinator.Instance);
         }
 
-        private void NewMission_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new NewMissionDialog();
-            dialog.Owner = this;    // 메인창 위에 뜨게
-            bool? result = dialog.ShowDialog();
-            
-        }
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // DB 연결
