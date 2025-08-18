@@ -228,7 +228,7 @@
                     <Border BorderBrush="Gray" BorderThickness="1" Padding="10"/>
                     <Label Content="시설 수동 제어" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
                     <StackPanel Margin="10,20,10,20">
-                        <Button Content="수동 제어 모드 ON" />
+                        <Button Content="{Binding ToggleButtonText}" Command="{Binding ToggleManualCommand}" />
                     </StackPanel>
                 </Grid>
 
@@ -237,7 +237,7 @@
                     <Border BorderBrush="Gray" BorderThickness="1" Padding="10"/>
                     <Label Content="적재 수동 제어" Background="White" FontWeight="Bold" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,-10,0,0"/>
                     <StackPanel Margin="10,20,10,20">
-                        <Button Content="적재물 투하" />
+                        <Button Content="적재물 투하" IsEnabled="{Binding IsManualMode}" Command="{Binding EjectCargoCommand}" />
                     </StackPanel>
                 </Grid>
             </StackPanel>

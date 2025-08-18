@@ -1,4 +1,5 @@
-﻿using System;
+﻿using agvProject.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace agvProject.Views
         public MainMonitoringView()
         {
             InitializeComponent();
+            DataContext = new MainMonitoringViewModel();
         }
 
         private void NewMission_Click(object sender, RoutedEventArgs e) { }
