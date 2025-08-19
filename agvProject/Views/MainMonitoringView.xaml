@@ -7,10 +7,8 @@
              xmlns:local="clr-namespace:agvProject.Views"       
              mc:Ignorable="d">
 
-    <!-- MainWindow에서 탭 아래로 내려가던 '상단 Grid'와 '하단 Grid'를 그대로 이동 -->
     <Grid>
-        <!-- 순서대로 탭 / 상단 Grid / 하단 Grid 에서
-            여기서는 탭을 제외하고 '상단 Grid(3*)'와 '하단 Grid(1.5*)'만 구성 -->
+        <!-- 상단 Grid / 하단 Grid 구성 -->
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="1.5*"/>
@@ -28,7 +26,18 @@
             <!-- 트랙 지도 -->
             <StackPanel Grid.Column="0" Margin="5">
 
-                <Image Height="Auto" Width="Auto" Source="/Views/Images/임시이미지.png" />
+                <Grid Width="{Binding MapWidth}" Height="{Binding MapHeight}">
+                    <!-- 바닥: 맵 PNG (좌표 계산 단순화 위해 Fill) -->
+                    <Image Source="/Views/map.png" Stretch="Fill"/>
+
+                    <!-- 오버레이: AGV PNG -->
+                    <Canvas>
+                        <Image Source="/Views/CarA.png"
+                               Width="{Binding AgvSize}" Height="{Binding AgvSize}"
+                               Canvas.Left="{Binding AgvX}" Canvas.Top="{Binding AgvY}"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </Canvas>
+                </Grid>
 
             </StackPanel>
 
@@ -69,6 +78,7 @@
                     </StackPanel>
                 </Border>
                 <Button Content="새 미션 등록" Width="100" Margin="10,0,0,0"  Command="{Binding NewMissionCommand}"/>
+                <Button Content="위치 인식하기" Width="100" Margin="10,0,0,0"  Command="{Binding LocateNowCommand}"/>
             </StackPanel>
 
             <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="1" Margin="5">
@@ -274,13 +284,14 @@
 
                 <!-- 데이터 표 -->
                 <DataGrid ItemsSource="{Binding StartedMissions}" AutoGenerateColumns="False" Margin="10,10,10,10" HeadersVisibility="Column"
-                          CanUserAddRows="False" RowHeaderWidth="0" ColumnHeaderHeight="30">
+                          CanUserAddRows="False" RowHeaderWidth="0" ColumnHeaderHeight="30" IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="no." Binding="{Binding RowNo}" Width="*" />
-                        <DataGridTextColumn Header="미션 ID" Binding="{Binding Name}" Width="3*"/>
+                        <DataGridTextColumn Header="no." Binding="{Binding RowNo}" Width="*" />       <!-- DB 연동 X : 자동 넘버-->  
+                        <DataGridTextColumn Header="미션 ID" Binding="{Binding Name}" Width="3*"/>    <!-- DB 연동 O -->
                         <DataGridTemplateColumn Header="출발지" Width="2.6*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
+                                    <!-- 임의 -->
                                     <TextBlock Text="-" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

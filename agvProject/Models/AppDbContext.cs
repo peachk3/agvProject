@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// DB 테스트 하려고 만듦: MissionAddTest
+
 namespace agvProject.Models
 {
     public partial class AppDbContext : DbContext
@@ -20,7 +22,7 @@ namespace agvProject.Models
         {
         }
 
-        // Db 저장 Test
+        // DB 저장 되는지 Test
         public virtual DbSet<MissionAddTest> MissionAddTest { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -7,9 +7,11 @@ using System.Collections.ObjectModel;
 
 namespace agvProject.ViewModels
 {
-    // ViewModelBase 대신 ObservableObject를 상속받습니다.
+    // ObservableObject를 상속
     public partial class MainViewModel : ObservableObject
     {
+
+        // 상단 탭 관련
         private readonly IDialogCoordinator dialog;
 
         public ObservableCollection<TabItemViewModel> TabItems { get; }

@@ -26,11 +26,5 @@ namespace agvProject.Views
             InitializeComponent();
         }
 
-        //private void NewMission_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var dialog = new NewMissionDialog();
-        //    dialog.Owner = Window.GetWindow(this);      // UserControl에선 바로 Owner = this 못씀
-        //    dialog.ShowDialog();                   
-        //}
     }
 }
